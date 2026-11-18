@@ -6,60 +6,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Khmer Daily News - Demo</title>
   <style>
+    :root {
+      --primary-color: #0056b3;
+      --primary-hover: #004085;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      --bg-body: #ffffff;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Kantumruy Pro', 'Arial', sans-serif;
+      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f0f2f5;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: hidden;
     }
 
     .container {
+      width: 100%;
       max-width: 800px;
-      margin: 20px auto;
+      margin: 0 auto;
       padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+      background-color: var(--bg-card);
+      border-radius: 0;
+      box-shadow: none;
+      transform: translateZ(0);
+      will-change: transform;
     }
 
     header {
       text-align: center;
-      padding: 20px 0;
-      border-bottom: 3px solid #0056b3;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 3px solid var(--primary-color);
     }
 
     header h1 {
       margin: 0;
-      color: #0056b3;
-      font-size: 28px;
+      color: var(--primary-color);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
     .post {
-      padding: 20px 0;
+      padding: 5px 0;
     }
 
     .post h2 {
-      color: #1a1a1a;
-      line-height: 1.4;
-      font-size: 24px;
+      color: #1a202c;
+      line-height: 1.45;
+      font-size: 22px;
+      margin-top: 10px;
+      margin-bottom: 15px;
     }
 
     .post p {
-      line-height: 1.8;
-      color: #333;
-      margin-bottom: 15px;
+      line-height: 1.85;
+      color: #4a5568;
+      margin-bottom: 18px;
+      font-size: 16px;
     }
 
     .date-meta {
-      color: #888;
+      color: var(--text-muted);
       font-size: 0.9em;
       margin-bottom: 15px;
+      font-weight: 500;
+      display: inline-block;
+      background: #edf2f7;
+      padding: 5px 10px;
+      border-radius: 6px;
     }
 
     footer {
       text-align: center;
       padding: 20px 0;
-      border-top: 1px solid #ddd;
-      color: #777;
+      margin-top: 20px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
       font-size: 14px;
     }
 
@@ -70,8 +108,19 @@
 
     .sknteam_image img {
       width: 100%;
-      max-width: 500px;
-      border-radius: 4px;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    @media (hover: hover) {
+      .sknteam_image img {
+        transition: transform 0.25s ease;
+      }
+
+      .sknteam_image img:hover {
+        transform: scale(1.01);
+      }
     }
 
     /* Ad Styles retained from your original template */
@@ -100,6 +149,21 @@
       text-align: center;
       font-weight: 600;
     }
+
+    /* Mobile Full-Screen Optimization */
+    @media (max-width: 800px) {
+      body {
+        background-color: #ffffff;
+      }
+
+      .container {
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 15px;
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 
@@ -115,7 +179,7 @@
       <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប ដើម្បីអបអរសាទរបុណ្យចូលឆ្នាំថ្មី</h2>
 
       <div class="sknteam_image">
-        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="News Image" />
+        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="News Image" loading="lazy" />
       </div>
 
       <p>
@@ -136,7 +200,6 @@
         data-click-url="https://carlsbergstore.my.canva.site/angkorbeerweb"></script>
 
       <p>
-
         ទន្ទឹមនឹងនេះដែរ កម្លាំងសមត្ថកិច្ចគ្រប់លំដាប់ថ្នាក់បានត្រៀមលក្ខណៈរួចជាស្រេច ដើម្បីការពារសន្តិសុខ
         និងសណ្តាប់ធ្នាប់ជូនបងប្អូនប្រជាពលរដ្ឋ។ អាជ្ញាធរក៏បានអំពាវនាវដល់ម្ចាស់អាជីវកម្មសេវាកម្មទេសចរណ៍ទាំងអស់
         កុំឲ្យមានការដំឡើងថ្លៃហួសហេតុក្នុងអំឡុងពេលបុណ្យប្រពៃណីជាតិនេះ។
@@ -149,7 +212,7 @@
       </p>
 
       <div class="sknteam_image">
-        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Footer Logo" />
+        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Footer Logo" loading="lazy" />
       </div>
     </div>
 
