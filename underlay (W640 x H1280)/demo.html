@@ -3,8 +3,14 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Khmer Daily News - Demo</title>
+
+  <!-- Khmer web font so text looks the same on every phone -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;700&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --primary-color: #0056b3;
@@ -18,6 +24,8 @@
 
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     * {
@@ -25,7 +33,7 @@
     }
 
     body {
-      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Arial', sans-serif;
+      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Noto Sans Khmer', 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       background-color: var(--bg-body);
@@ -33,23 +41,33 @@
       -webkit-font-smoothing: antialiased;
       -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
+      overflow-wrap: break-word;
     }
 
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* NOTE: removed transform/will-change here. They make this box the
+       containing block for the underlay ad (position:absolute/fixed),
+       which shifts or clips the ad on phones. */
     .container {
       width: 100%;
       max-width: 800px;
+      min-height: 100vh;
+      min-height: 100dvh;
       margin: 0 auto;
       padding: 20px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
       background-color: var(--bg-card);
-      border-radius: 0;
-      box-shadow: none;
-      transform: translateZ(0);
-      will-change: transform;
     }
 
     header {
       text-align: center;
-      padding-bottom: 20px;
+      padding-bottom: 16px;
       margin-bottom: 20px;
       border-bottom: 3px solid var(--primary-color);
     }
@@ -57,9 +75,9 @@
     header h1 {
       margin: 0;
       color: var(--primary-color);
-      font-size: 26px;
+      font-size: clamp(22px, 5vw, 28px);
       font-weight: 700;
-      letter-spacing: -0.5px;
+      line-height: 1.5;
     }
 
     .post {
@@ -68,28 +86,29 @@
 
     .post h2 {
       color: #1a202c;
-      line-height: 1.45;
-      font-size: 22px;
+      line-height: 1.55;
+      font-size: clamp(20px, 4.4vw, 24px);
       margin-top: 10px;
       margin-bottom: 15px;
     }
 
     .post p {
-      line-height: 1.85;
+      line-height: 1.9;
       color: #4a5568;
-      margin-bottom: 18px;
-      font-size: 16px;
+      margin: 0 0 18px;
+      font-size: clamp(16px, 3.2vw, 18px);
     }
 
     .date-meta {
       color: var(--text-muted);
-      font-size: 0.9em;
+      font-size: 14px;
       margin-bottom: 15px;
       font-weight: 500;
       display: inline-block;
       background: #edf2f7;
       padding: 5px 10px;
       border-radius: 6px;
+      line-height: 1.6;
     }
 
     footer {
@@ -99,6 +118,7 @@
       border-top: 1px solid var(--border-color);
       color: var(--text-muted);
       font-size: 14px;
+      line-height: 1.6;
     }
 
     .sknteam_image {
@@ -109,6 +129,8 @@
     .sknteam_image img {
       width: 100%;
       height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
@@ -123,7 +145,7 @@
       }
     }
 
-    /* Ad Styles retained from your original template */
+    /* Ad styles (unchanged, but height now scales with screen width) */
     .thestresstnews-container {
       width: 100%;
       position: absolute;
@@ -136,13 +158,13 @@
       background-size: cover;
       background-position: center;
       width: 100%;
-      height: 350px;
+      height: min(350px, 55vw);
     }
 
     .thestresstnews-install-button {
       background-color: #1a73e8;
       color: white;
-      padding: 8px;
+      padding: 10px;
       border-radius: 20px;
       text-decoration: none;
       display: block;
@@ -150,18 +172,12 @@
       font-weight: 600;
     }
 
-    /* Mobile Full-Screen Optimization */
-    @media (max-width: 800px) {
-      body {
-        background-color: #ffffff;
-      }
-
+    /* Phone screens (covers 640 x 1280 and narrower) */
+    @media (max-width: 640px) {
       .container {
-        width: 100%;
-        min-height: 100vh;
-        margin: 0;
         padding: 15px;
-        border-radius: 0;
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
       }
     }
   </style>
@@ -179,7 +195,8 @@
       <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប ដើម្បីអបអរសាទរបុណ្យចូលឆ្នាំថ្មី</h2>
 
       <div class="sknteam_image">
-        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="News Image" loading="lazy" />
+        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="News Image" width="1280" height="720"
+          loading="lazy" />
       </div>
 
       <p>
@@ -212,7 +229,8 @@
       </p>
 
       <div class="sknteam_image">
-        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Footer Logo" loading="lazy" />
+        <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Footer Logo" width="1280" height="720"
+          loading="lazy" />
       </div>
     </div>
 
