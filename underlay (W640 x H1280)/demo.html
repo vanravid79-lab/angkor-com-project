@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Khmer Daily News - Demo</title>
+  <title>Khmer Daily News - Demo (640x1280)</title>
 
   <!-- Khmer web font so text looks the same on every phone -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,8 @@
       --primary-hover: #004085;
       --text-main: #2d3748;
       --text-muted: #718096;
-      --bg-body: #ffffff;
+      --bg-body: #f1f5f9;
+      /* Light background to highlight the 640x1280 frame */
       --bg-card: #ffffff;
       --border-color: #e2e8f0;
     }
@@ -49,20 +50,19 @@
       display: block;
     }
 
-    /* NOTE: removed transform/will-change here. They make this box the
-       containing block for the underlay ad (position:absolute/fixed),
-       which shifts or clips the ad on phones. */
+    /* 🎯 Set container to 640px width and min 1280px height */
     .container {
-      width: 100%;
-      max-width: 800px;
-      min-height: 100vh;
-      min-height: 100dvh;
+      width: 640px;
+      max-width: 100%;
+      min-height: 1280px;
       margin: 0 auto;
       padding: 20px;
       padding-left: max(20px, env(safe-area-inset-left));
       padding-right: max(20px, env(safe-area-inset-right));
       padding-bottom: max(20px, env(safe-area-inset-bottom));
       background-color: var(--bg-card);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+      /* Clean mobile device border */
     }
 
     header {
@@ -145,7 +145,7 @@
       }
     }
 
-    /* Ad styles (unchanged, but height now scales with screen width) */
+    /* Ad styles */
     .thestresstnews-container {
       width: 100%;
       position: absolute;
@@ -213,6 +213,7 @@
         និងការរីកចម្រើននៃវិស័យទេសចរណ៍នៅក្នុងតំបន់សៀមរាបអង្គរ។
       </p>
 
+      <!-- 640x1280 Underlay Ad Slot -->
       <script src="https://sknteam.com/ad-scripts/underlay_master.js" data-ad-src="./index.html"
         data-click-url="https://carlsbergstore.my.canva.site/angkorbeerweb"></script>
 
@@ -236,8 +237,6 @@
 
     <footer>រក្សាសិទ្ធិគ្រប់យ៉ាង &copy; 2026 Khmer Daily News</footer>
   </div>
-
-
 </body>
 
 </html>
