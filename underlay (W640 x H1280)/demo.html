@@ -27,6 +27,26 @@
       scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
+      overscroll-behavior-y: contain;
+      /* Eliminates harsh page bounce */
+    }
+
+    /* Smooth Scroll (Lenis) Rules */
+    html.lenis,
+    html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
     }
 
     * {
@@ -43,6 +63,7 @@
       -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
       overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
     }
 
     img {
@@ -52,6 +73,7 @@
 
     /* 🎯 Set container to 640px width and min 1280px height */
     .container {
+      position: relative;
       width: 640px;
       max-width: 100%;
       min-height: 1280px;
@@ -62,7 +84,9 @@
       padding-bottom: max(20px, env(safe-area-inset-bottom));
       background-color: var(--bg-card);
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
-      /* Clean mobile device border */
+      transform: translateZ(0);
+      /* GPU acceleration to avoid scroll stutter */
+      backface-visibility: hidden;
     }
 
     header {
@@ -237,6 +261,84 @@
 
     <footer>រក្សាសិទ្ធិគ្រប់យ៉ាង &copy; 2026 Khmer Daily News</footer>
   </div>
+
+  <!-- Smooth Momentum Scrolling Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <script>
+    (function () {
+      // 1. Lenis smooth momentum scroll (primary)
+      if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Natural deceleration
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1.0,
+          touchMultiplier: 1.5,
+          infinite: false,
+        });
+
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      } else {
+        // 2. Pure JS smooth lerp scroll (fallback if CDN is offline)
+        let currentY = window.scrollY;
+        let targetY = window.scrollY;
+        let isMoving = false;
+        const ease = 0.08;
+
+        function smoothLoop() {
+          const diff = targetY - currentY;
+          if (Math.abs(diff) < 0.5) {
+            currentY = targetY;
+            window.scrollTo(0, currentY);
+            isMoving = false;
+            return;
+          }
+          currentY += diff * ease;
+          window.scrollTo(0, currentY);
+          requestAnimationFrame(smoothLoop);
+        }
+
+        window.addEventListener('wheel', (e) => {
+          let el = e.target;
+          while (el && el !== document.body && el !== document.documentElement) {
+            const overflowY = window.getComputedStyle(el).overflowY;
+            if ((overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight) {
+              return;
+            }
+            el = el.parentElement;
+          }
+
+          e.preventDefault();
+          const maxScroll = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
+          ) - window.innerHeight;
+
+          targetY = Math.max(0, Math.min(targetY + e.deltaY, maxScroll));
+
+          if (!isMoving) {
+            isMoving = true;
+            currentY = window.scrollY;
+            requestAnimationFrame(smoothLoop);
+          }
+        }, { passive: false });
+
+        window.addEventListener('scroll', () => {
+          if (!isMoving) {
+            targetY = window.scrollY;
+            currentY = window.scrollY;
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 
 </html>
